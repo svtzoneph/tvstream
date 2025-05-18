@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SBS | STREAM </title>
+  <style>
+    :root {
+      --bg-color: #111;
+      --text-color: white;
+      --card-bg: #333;
+      --card-hover: #555;
+    }
+
+    body.light {
+      --bg-color: #f5f5f5;
+      --text-color: #111;
+      --card-bg: #ddd;
+      --card-hover: #ccc;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg-color);
+      color: var(--text-color);
+      font-family: sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+      transition: background 0.3s, color 0.3s;
+      user-select: none;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+      font-size: 28px;
+    }
+
+    video {
+      width: 90%;
+      max-width: 960px;
+      /* border removed */
+      border-radius: 12px;
+      background-color: #000;
+      margin-bottom: 15px;
+    }
+
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    select, .theme-toggle {
+      padding: 10px 20px;
+      background: var(--card-bg);
+      color: var(--text-color);
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    select:hover, .theme-toggle:hover {
+      background: var(--card-hover);
+    }
+
+    .theme-toggle {
+       position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #444;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 24px;
+      z-index: 1000;
+    }
+
+    /* Disable image drag */
+    img, video {
+      -webkit-user-drag: none;
+      pointer-events: auto;
+    }
+  </style>
+</head>
+<body oncontextmenu="return false" onkeydown="return disableKeys(event)" ondragstart="return false">
+  <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+
+  <h1>SBS Live Stream</h1>
+  <video id="video" controls autoplay></video>
+
+  <div class="controls">
+    <label>
+      Server:
+      <select id="serverSelect"></select>
+    </label>
+    <label>
+      Quality:
+      <select id="qualitySelect">
+        <option value="-1">Auto</option>
+      </select>
+    </label>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+  <script>
+    const video = document.getElementById('video');
+    const qualitySelect = document.getElementById('qualitySelect');
+    const serverSelect = document.getElementById('serverSelect');
+    const themeBtn = document.querySelector('.theme-toggle');
+    let hls;
+
+    const sbsStreams = [
+      { label: "SBS Server 1", url: "https://live-114.myjktv.com/playlist/live.m3u8?sid=k5KrPzDHWVrhHaRwhBeyDfOFUb8C5Oo9jag24idG&secret=3ba6d615f2eaddcf45631405611103ab&time=1747582294" },
+      { label: "SBS Server 2", url: "https://vod.ikbc.co.kr/KBCTV/tv/chunklist.m3u8" },
+      { label: "SBS Server 3", url: "https://media.jibs.co.kr/stream/1_2000_126844/index.m3u8" },
+      { label: "SBS Server 4", url: "https://stream1.knn.co.kr/hls/9ly4534y7dm2xfa123r2_tv/index.m3u8" }
+    ];
+
+    function loadStream(index) {
+      const stream = sbsStreams[index];
+      if (!stream || !stream.url) {
+        alert("Invalid stream URL.");
+        return;
+      }
+
+      if (hls) {
+        hls.destroy();
+        hls = null;
+      }
+
+      qualitySelect.innerHTML = '';
+      const autoOption = document.createElement('option');
+      autoOption.value = -1;
+      autoOption.text = "Auto";
+      qualitySelect.appendChild(autoOption);
+
+      if (Hls.isSupported()) {
+        hls = new Hls();
+        hls.loadSource(stream.url);
+        hls.attachMedia(video);
+
+        hls.on(Hls.Events.MANIFEST_PARSED, () => {
+          const levels = hls.levels;
+
+          const fixedQualities = [144, 240, 360, 480, 720, 1080];
+          fixedQualities.forEach(q => {
+            let closestIndex = -1;
+            let minDiff = Infinity;
+
+            levels.forEach((level, i) => {
+              const diff = Math.abs(level.height - q);
+              if (diff < minDiff) {
+                minDiff = diff;
+                closestIndex = i;
+              }
+            });
+
+            if (closestIndex !== -1) {
+              const opt = document.createElement('option');
+              opt.value = closestIndex;
+              opt.text = `${q}p`;
+              qualitySelect.appendChild(opt);
+            }
+          });
+
+          video.play();
+        });
+
+        qualitySelect.addEventListener('change', () => {
+          const selected = parseInt(qualitySelect.value);
+          hls.currentLevel = selected;
+        });
+
+      } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+        video.src = stream.url;
+        alert("Native HLS support: Quality selection unavailable.");
+        video.play();
+      } else {
+        alert("HLS not supported on this browser.");
+      }
+    }
+
+    function toggleTheme() {
+      const isLight = document.body.classList.toggle('light');
+      localStorage.setItem('theme', isLight ? 'light' : 'dark');
+      updateThemeIcon();
+    }
+
+    function updateThemeIcon() {
+      const isLight = document.body.classList.contains('light');
+      themeBtn.textContent = isLight ? '☀️' : '🌙';
+    }
+
+    function applyStoredTheme() {
+      const saved = localStorage.getItem('theme');
+      if (saved === 'light') {
+        document.body.classList.add('light');
+      } else if (!saved) {
+        // If not set, follow system preference
+        if (window.matchMedia('(prefers-color-scheme: light)').matches) {
+          document.body.classList.add('light');
+        }
+      }
+      updateThemeIcon();
+    }
+
+    function disableKeys(e) {
+      if (
+        e.key === "F12" ||
+        (e.ctrlKey && e.shiftKey && ["I", "J"].includes(e.key)) ||
+        (e.ctrlKey && e.key === "U")
+      ) {
+        return false;
+      }
+    }
+
+    function init() {
+      sbsStreams.forEach((stream, index) => {
+        const option = document.createElement('option');
+        option.value = index;
+        option.textContent = stream.label;
+        serverSelect.appendChild(option);
+      });
+
+      serverSelect.addEventListener('change', () => {
+        loadStream(parseInt(serverSelect.value));
+      });
+
+      loadStream(0);
+      applyStoredTheme();
+    }
+
+    window.onload = init;
+  </script>
+</body>
+</html>
