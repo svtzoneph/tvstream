@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Korean Live TV</title>
+  <style>
+    body {
+      margin: 0;
+      background: #111;
+      font-family: sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      color: white;
+      padding: 20px;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+    }
+
+    video {
+      width: 90%;
+      max-width: 960px;
+      border: 3px solid #fff;
+      border-radius: 12px;
+      background-color: #000;
+      margin-bottom: 15px;
+    }
+
+    .button-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      margin-top: 15px;
+    }
+
+    button {
+      padding: 10px 20px;
+      background: #333;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background: #555;
+    }
+
+    select {
+      padding: 8px;
+      border-radius: 6px;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Live Korean TV</h1>
+
+  <video id="video" controls autoplay></video>
+  <select id="qualitySelect"></select>
+
+  <!-- Buttons moved below -->
+  <div class="button-container">
+    <button onclick="loadStream('sbs')">SBS</button>
+    <button onclick="loadStream('mbs')">MBS</button>
+    <button onclick="loadStream('kbs')">KBS</button>
+    <button onclick="loadStream('jtbc')">JTBC</button>
+    <button onclick="loadStream('tvn')">tvN</button>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+  <script>
+    const video = document.getElementById('video');
+    const qualitySelect = document.getElementById('qualitySelect');
+    let hls;
+
+    const streams = {
+      sbs: "https://live-edge-th136.myjktv.com/playlist/live.m3u8?sid=HBympK1bMrirwKp6XSvQqmMnmDpf5e92VoSDT60n&secret=f0e2b0a189caae90ac1e01693830684d&time=1747551678",
+      mbs: "",
+      kbs: "https://example.com/kbs.m3u8",
+      jtbc: "https://example.com/jtbc.m3u8",
+      tvn: "https://example.com/tvn.m3u8"
+    };
+
+    function loadStream(channel) {
+      const videoSrc = streams[channel];
+      if (!videoSrc) {
+        alert("Stream not available for this channel.");
+        return;
+      }
+
+      if (hls) {
+        hls.destroy();
+        hls = null;
+      }
+
+      qualitySelect.innerHTML = ''; // clear previous options
+
+      if (Hls.isSupported()) {
+        hls = new Hls();
+        hls.loadSource(videoSrc);
+        hls.attachMedia(video);
+
+        hls.on(Hls.Events.MANIFEST_PARSED, function () {
+          const levels = hls.levels;
+
+          levels.forEach((level, index) => {
+            const option = document.createElement('option');
+            option.value = index;
+            option.text = `${level.height}p`;
+            qualitySelect.appendChild(option);
+          });
+
+          const autoOption = document.createElement('option');
+          autoOption.value = -1;
+          autoOption.text = "Auto";
+          qualitySelect.appendChild(autoOption);
+          qualitySelect.value = -1;
+
+          video.play();
+        });
+
+        qualitySelect.addEventListener('change', function () {
+          const selectedLevel = parseInt(this.value);
+          hls.currentLevel = selectedLevel;
+        });
+
+      } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+        video.src = videoSrc;
+        video.addEventListener('loadedmetadata', function () {
+          video.play();
+        });
+        alert("Native HLS support: Quality selection not available.");
+      } else {
+        alert("Your browser does not support HLS playback.");
+      }
+    }
+
+    window.onload = () => {
+      loadStream('mbs');
+    };
+  </script>
+
+</body>
+</html>
