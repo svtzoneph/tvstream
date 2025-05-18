@@ -181,6 +181,18 @@
       font-size: 24px;
       z-index: 1000;
     }
+    
+    #liveIndicator {
+  color: gray;
+  font-weight: bold;
+  font-size: 14px;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 4px 8px;
+  border-radius: 10px;
+  user-select: none;
+  pointer-events: none;
+} 
+
   </style>
 </head>
 <body oncontextmenu="return false" onkeydown="return disableKeys(event)" ondragstart="return false">
@@ -191,6 +203,7 @@
   <div class="video-wrapper" id="videoWrapper">
     <video id="video" autoplay muted playsinline></video>
     <div id="videoControls">
+      <span id="liveIndicator"> LIVE</span>
       <button id="playPauseBtn">►</button>
       <button id="volumeBtn">🔊</button>
       <input type="range" id="volumeSlider" min="0" max="1" step="0.01" value="1" />
@@ -229,15 +242,17 @@
 
     const sbsStreams = [
       { label: "SBS Server 1", url: "https://live-114.myjktv.com/playlist/live.m3u8?sid=k5KrPzDHWVrhHaRwhBeyDfOFUb8C5Oo9jag24idG&secret=3ba6d615f2eaddcf45631405611103ab&time=1747582294" },
-      { label: "SBS Server 2", url: "https://vod.ikbc.co.kr/KBCTV/tv/chunklist.m3u8" },
-      { label: "SBS Server 3", url: "https://media.jibs.co.kr/stream/1_2000_126844/index.m3u8" },
-      { label: "SBS Server 4", url: "https://stream1.knn.co.kr/hls/9ly4534y7dm2xfa123r2_tv/index.m3u8" }
+      { label: "SBS Server 2", url: "https://live-edge-th136.myjktv.com/playlist/live.m3u8?sid=sOQ2x4oQUpmm8Rhll2tTLAaWkJbvnDuchvVfSjz9&secret=ea9479573902490eec4833bf0aca2751&time=1747586819" },
+      { label: "SBS Server 3", url: "" },
+      { label: "SBS Server 4", url: "https://media.jibs.co.kr/stream/1_2000_126844/index.m3u8" },
+      { label: "SBS Server 5", url: "https://stream1.knn.co.kr/hls/9ly4534y7dm2xfa123r2_tv/index.m3u8" }
+      
     ];
 
     function loadStream(index) {
       const stream = sbsStreams[index];
       if (!stream || !stream.url) {
-        alert("Invalid stream URL.");
+        alert("NO SERVER.");
         return;
       }
 
