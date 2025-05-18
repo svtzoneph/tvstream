@@ -2,152 +2,245 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Korean Live TV</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>STREAM KR</title>
   <style>
     body {
       margin: 0;
       background: #111;
       font-family: sans-serif;
+      color: white;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: flex-start;
-      color: white;
       padding: 20px;
+      transition: background 0.3s, color 0.3s;
     }
 
-    h1 {
+    header {
+      width: 100%;
+      background: #222;
+      padding: 15px 20px;
+      box-sizing: border-box;
+      font-weight: bold;
+      font-size: 24px;
+      color: white;
+      text-align: left;
+      user-select: none;
       margin-bottom: 20px;
     }
 
-    video {
-      width: 90%;
-      max-width: 960px;
-      border: 3px solid #fff;
-      border-radius: 12px;
-      background-color: #000;
+    h1 {
+      align-self: flex-start;
+      font-weight: bold;
+      margin: 0 0 10px 0;
+      color: white;
+      font-size: 28px;
+    }
+
+    .real-time-text {
+      width: 100%;
+      text-align: center;
+      font-weight: bold;
+      font-size: 18px;
       margin-bottom: 15px;
+      user-select: none;
     }
 
     .button-container {
       display: flex;
       flex-wrap: wrap;
-      gap: 10px;
       justify-content: center;
-      margin-top: 15px;
+      gap: 20px;
+      max-width: 980px;
     }
 
-    button {
-      padding: 10px 20px;
+    .button-container a {
+      text-decoration: none;
+    }
+
+    button.channel-button {
       background: #333;
-      color: white;
       border: none;
       border-radius: 8px;
+      color: white;
       cursor: pointer;
       font-size: 16px;
+      padding: 10px 15px 15px 15px;
+      width: 110px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
       transition: background 0.3s;
     }
 
-    button:hover {
+    button.channel-button:hover {
       background: #555;
     }
 
-    select {
-      padding: 8px;
-      border-radius: 6px;
-      font-size: 16px;
+    button.channel-button img {
+      width: 64px;
+      height: 64px;
+      object-fit: contain;
+      margin-bottom: 8px;
+    }
+
+    .theme-toggle {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #444;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 24px;
+      z-index: 999;
+    }
+
+    body.light-mode {
+      background: #f5f5f5;
+      color: #111;
+    }
+
+    body.light-mode header {
+      background: #ddd;
+      color: #111;
+    }
+
+    body.light-mode h1 {
+      color: #111;
+    }
+
+    body.light-mode button.channel-button {
+      background: #ddd;
+      color: #000;
+    }
+
+    body.light-mode button.channel-button:hover {
+      background: #bbb;
+    }
+
+    body.light-mode .theme-toggle {
+      background: #ccc;
+      color: #000;
     }
   </style>
 </head>
 <body>
+  <header>STREAM</header>
 
-  <h1>Live Korean TV</h1>
+  <h1>Real Time</h1>
 
-  <video id="video" controls autoplay></video>
-  <select id="qualitySelect"></select>
-
-  <!-- Buttons moved below -->
   <div class="button-container">
-    <button onclick="loadStream('sbs')">SBS</button>
-    <button onclick="loadStream('mbs')">MBS</button>
-    <button onclick="loadStream('kbs')">KBS</button>
-    <button onclick="loadStream('jtbc')">JTBC</button>
-    <button onclick="loadStream('tvn')">tvN</button>
+    <a href="https://kbs.co.kr/kbs1" target="_blank" rel="noopener noreferrer">
+      <button class="channel-button">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/KBS1_logo.svg/80px-KBS1_logo.svg.png" alt="KBS1 Logo" />
+        KBS1
+      </button>
+    </a>
+
+    <a href="https://kbs.co.kr/kbs2" target="_blank" rel="noopener noreferrer">
+      <button class="channel-button">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/KBS2_logo.svg/80px-KBS2_logo.svg.png" alt="KBS2 Logo" />
+        KBS2
+      </button>
+    </a>
+
+    <a href="https://mbc.co.kr" target="_blank" rel="noopener noreferrer">
+      <button class="channel-button">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/MBC_Logo.svg/80px-MBC_Logo.svg.png" alt="MBC Logo" />
+        MBC
+      </button>
+    </a>
+
+    <a href="https://sbs.co.kr" target="_blank" rel="noopener noreferrer">
+      <button class="channel-button">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/SBS_logo.svg/80px-SBS_logo.svg.png" alt="SBS Logo" />
+        SBS
+      </button>
+    </a>
+
+    <a href="https://jtbc.co.kr" target="_blank" rel="noopener noreferrer">
+      <button class="channel-button">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/JTBC_logo.svg/80px-JTBC_logo.svg.png" alt="JTBC Logo" />
+        JTBC
+      </button>
+    </a>
+
+    <a href="https://www.ichannela.com" target="_blank" rel="noopener noreferrer">
+      <button class="channel-button">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c4/Channel_A_logo.svg/80px-Channel_A_logo.svg.png" alt="CHANNEL A Logo" />
+        CHANNELA
+      </button>
+    </a>
+
+    <a href="https://tvn.cjenm.com" target="_blank" rel="noopener noreferrer">
+      <button class="channel-button">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/97/TvN_logo.svg/80px-TvN_logo.svg.png" alt="tvN Logo" />
+        TVN
+      </button>
+    </a>
+
+    <a href="https://mnet.interest.me" target="_blank" rel="noopener noreferrer">
+      <button class="channel-button">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/Mnet_logo.svg/80px-Mnet_logo.svg.png" alt="MNET Logo" />
+        MNET
+      </button>
+    </a>
+
+    <a href="https://sbsplus.co.kr" target="_blank" rel="noopener noreferrer">
+      <button class="channel-button">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/SBS_logo.svg/80px-SBS_logo.svg.png" alt="SBS PLUS Logo" />
+        SBS PLUS
+      </button>
+    </a>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+  <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle Theme">🌙</button>
+
   <script>
-    const video = document.getElementById('video');
-    const qualitySelect = document.getElementById('qualitySelect');
-    let hls;
+    // Theme toggle with icon switch and localStorage persistence
+    const themeToggleBtn = document.querySelector('.theme-toggle');
 
-    const streams = {
-      sbs: "https://live-edge-th136.myjktv.com/playlist/live.m3u8?sid=HBympK1bMrirwKp6XSvQqmMnmDpf5e92VoSDT60n&secret=f0e2b0a189caae90ac1e01693830684d&time=1747551678",
-      mbs: "",
-      kbs: "https://example.com/kbs.m3u8",
-      jtbc: "https://example.com/jtbc.m3u8",
-      tvn: "https://example.com/tvn.m3u8"
-    };
-
-    function loadStream(channel) {
-      const videoSrc = streams[channel];
-      if (!videoSrc) {
-        alert("Stream not available for this channel.");
-        return;
-      }
-
-      if (hls) {
-        hls.destroy();
-        hls = null;
-      }
-
-      qualitySelect.innerHTML = ''; // clear previous options
-
-      if (Hls.isSupported()) {
-        hls = new Hls();
-        hls.loadSource(videoSrc);
-        hls.attachMedia(video);
-
-        hls.on(Hls.Events.MANIFEST_PARSED, function () {
-          const levels = hls.levels;
-
-          levels.forEach((level, index) => {
-            const option = document.createElement('option');
-            option.value = index;
-            option.text = `${level.height}p`;
-            qualitySelect.appendChild(option);
-          });
-
-          const autoOption = document.createElement('option');
-          autoOption.value = -1;
-          autoOption.text = "Auto";
-          qualitySelect.appendChild(autoOption);
-          qualitySelect.value = -1;
-
-          video.play();
-        });
-
-        qualitySelect.addEventListener('change', function () {
-          const selectedLevel = parseInt(this.value);
-          hls.currentLevel = selectedLevel;
-        });
-
-      } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-        video.src = videoSrc;
-        video.addEventListener('loadedmetadata', function () {
-          video.play();
-        });
-        alert("Native HLS support: Quality selection not available.");
+    function applyTheme(isLight) {
+      if (isLight) {
+        document.body.classList.add('light-mode');
+        themeToggleBtn.textContent = '☀️';
       } else {
-        alert("Your browser does not support HLS playback.");
+        document.body.classList.remove('light-mode');
+        themeToggleBtn.textContent = '🌙';
       }
     }
 
-    window.onload = () => {
-      loadStream('mbs');
-    };
-  </script>
+    function toggleTheme() {
+      const isLight = document.body.classList.toggle('light-mode');
+      applyTheme(isLight);
+      localStorage.setItem('theme', isLight ? 'light' : 'dark');
+    }
 
+    // On page load, apply stored theme or default to dark
+    window.addEventListener('DOMContentLoaded', () => {
+      const savedTheme = localStorage.getItem('theme');
+      applyTheme(savedTheme === 'light');
+    });
+
+    // 🔒 Security features to block inspect, right-click, view source, etc.
+    document.addEventListener("keydown", function (e) {
+      if (
+        e.key === "F12" ||
+        (e.ctrlKey && e.shiftKey && (e.key === "I" || e.key === "C" || e.key === "J")) ||
+        (e.ctrlKey && e.key === "U")
+      ) {
+        e.preventDefault();
+        alert("Sorry, this action is disabled.");
+      }
+    });
+
+    document.addEventListener("contextmenu", function (e) {
+      e.preventDefault();
+    });
+  </script>
 </body>
 </html>
