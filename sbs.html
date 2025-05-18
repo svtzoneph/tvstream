@@ -75,16 +75,18 @@
       pointer-events: none;
     }
 
-    #videoControls button {
-      border: none;
-      background: transparent;
-      color: white;
-      font-size: 18px;
-      cursor: pointer;
-      padding: 5px 15px;
-      border-radius: 30px;
-      transition: background 0.3s;
-    }
+#videoControls button {
+  border: none;
+  background: transparent;
+  color: white;
+  font-size: 18px; /* smaller font */
+  cursor: pointer;
+  padding: 4px 8px; /* smaller padding */
+  border-radius: 20px;
+  transition: background 0.3s;
+}
+
+
 
     #videoControls button:hover {
       background: rgba(255, 255, 255, 0.2);
@@ -95,7 +97,7 @@
       width: 100px;
       cursor: pointer;
       border-radius: 5px;
-      height: 6px;
+      height: 5px;
       background: #444;
       -webkit-appearance: none;
       appearance: none;
@@ -119,7 +121,7 @@
       cursor: pointer;
       border-radius: 50%;
       border: none;
-      margin-top: -6px; /* center vertically */
+      margin-top: -2px; /* center vertically */
       transition: background 0.3s;
     }
 
@@ -189,7 +191,7 @@
   <div class="video-wrapper" id="videoWrapper">
     <video id="video" autoplay muted playsinline></video>
     <div id="videoControls">
-      <button id="playPauseBtn">Pause</button>
+      <button id="playPauseBtn">►</button>
       <button id="volumeBtn">🔊</button>
       <input type="range" id="volumeSlider" min="0" max="1" step="0.01" value="1" />
       <button id="fullscreenBtn">⛶</button>
