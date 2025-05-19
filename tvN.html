@@ -271,6 +271,25 @@
       font-size: 24px;
       z-index: 1000;
     }
+
+      .contact-btn {
+  padding: 10px 10px;
+  color: var(--text-color);
+  border: none;
+  background: #444;
+  border-radius: 8px;
+  font-size: 14px;
+  text-decoration: none;
+  display: inline-block;
+  transition: background 0.3s;
+  align-content: center ;
+  z-index: 1000;
+}
+
+.contact-btn:hover {
+  background: var(--card-hover);
+}
+    
   </style>
 </head>
 <body oncontextmenu="return false" onkeydown="return disableKeys(event)" ondragstart="return false">
@@ -312,6 +331,9 @@
     </label>
   </div>
 
+<a href="https://x.com/101_livestream" class="contact-btn">Contact Us</a>
+</div>
+    
   <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
   <script>
     const video = document.getElementById('video');
@@ -457,23 +479,25 @@
       volumeBtn.textContent = video.muted ? '🔇' : '🔊';
     }
 
-    function toggleFullscreen() {
-      if (!document.fullscreenElement) {
-        if (videoWrapper.requestFullscreen) {
-          videoWrapper.requestFullscreen();
-        } else if (videoWrapper.mozRequestFullScreen) { /* Firefox */
-          videoWrapper.mozRequestFullScreen();
-        } else if (videoWrapper.webkitRequestFullscreen) { /* Chrome, Safari & Opera */
-          videoWrapper.webkitRequestFullscreen();
-        } else if (videoWrapper.msRequestFullscreen) { /* IE/Edge */
-          videoWrapper.msRequestFullscreen();
+  function toggleFullscreen() {
+  const elem = videoWrapper;
+
+  if (!document.fullscreenElement) {
+    const requestFS = elem.requestFullscreen || elem.webkitRequestFullscreen || elem.mozRequestFullScreen || elem.msRequestFullscreen;
+
+    if (requestFS) {
+      requestFS.call(elem).then(() => {
+        if (screen.orientation && screen.orientation.lock) {
+          screen.orientation.lock('landscape').catch(err => {
+            console.warn('Orientation lock failed:', err);
+          });
         }
-      } else {
-        if (document.exitFullscreen) {
-          document.exitFullscreen();
-        }
-      }
+      });
     }
+  } else {
+    document.exitFullscreen();
+  }
+}
 
     function showControls() {
       videoControls.classList.remove('hidden');
