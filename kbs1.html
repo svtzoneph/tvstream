@@ -37,7 +37,6 @@
       font-size: 28px;
     }
 
-    /* Video wrapper and video */
     .video-wrapper {
       position: relative;
       width: 90%;
@@ -53,21 +52,23 @@
       pointer-events: auto;
     }
 
-    /* Controls overlay */
+    /* Updated controls style */
     #videoControls {
       position: absolute;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%);
+      bottom: 0;
+      left: 0;
+      width: 100%;
       display: flex;
       align-items: center;
-      gap: 10px;
-      background: rgba(0, 0, 0, 0.5);
-      padding: 8px 20px;
-      border-radius: 30px;
+      background: rgba(0, 0, 0, 0.6);
+      padding: 10px 15px;
+      border-radius: 0 0 12px 12px;
       user-select: none;
       transition: opacity 0.3s ease;
       opacity: 1;
+      box-sizing: border-box;
+      pointer-events: auto;
+      z-index: 10;
     }
 
     #videoControls.hidden {
@@ -75,53 +76,88 @@
       pointer-events: none;
     }
 
-#videoControls button {
-  border: none;
-  background: transparent;
-  color: white;
-  font-size: 14px; /* smaller font */
-  cursor: pointer;
-  padding: 4px 8px; /* smaller padding */
-  border-radius: 20px;
-  transition: background 0.3s;
-}
+    /* Left controls group (live indicator + buttons) */
+    .left-controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-right: 10px;
+    }
 
+    #liveIndicator {
+      color: white;
+      font-weight: bold;
+      font-size: 12px;
+      background: rgba(255, 0, 0, 0.7);
+      padding: 4px 8px;
+      border-radius: 10px;
+      user-select: none;
+      pointer-events: none;
+      flex-shrink: 0;
+    }
 
+    /* Button styles */
+    #videoControls button {
+      border: none;
+      background: transparent;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      padding: 4px;
+      border-radius: 4px;
+      transition: background 0.3s;
+      flex-shrink: 0;
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
 
     #videoControls button:hover {
       background: rgba(255, 255, 255, 0.2);
     }
 
-    /* Volume slider styling */
+    /* Volume controls container */
+    .volume-container {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    /* Volume slider that pops up */
     #volumeSlider {
-      width: 100px;
+      position: absolute;
+      bottom: 60px;
+      left: 50%;
+      transform: translateX(-50%) rotate(270deg);
+      width: 80px;
+      height: 5px;
       cursor: pointer;
       border-radius: 5px;
-      height: 5px;
       background: #444;
       -webkit-appearance: none;
       appearance: none;
-      margin-left: 10px;
-      margin-right: 10px;
-      vertical-align: middle;
-      transition: background 0.3s;
+      margin: 0;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
     }
 
-    #volumeSlider:hover {
-      background: #666;
+    .volume-container:hover #volumeSlider {
+      opacity: 1;
+      pointer-events: auto;
     }
 
-    /* Chrome, Safari, Opera */
     #volumeSlider::-webkit-slider-thumb {
       -webkit-appearance: none;
       appearance: none;
-      width: 18px;
-      height: 18px;
+      width: 14px;
+      height: 14px;
       background: white;
       cursor: pointer;
       border-radius: 50%;
       border: none;
-      margin-top: -0px; /* center vertically */
       transition: background 0.3s;
     }
 
@@ -129,10 +165,9 @@
       background: #ffcc00;
     }
 
-    /* Firefox */
     #volumeSlider::-moz-range-thumb {
-      width: 18px;
-      height: 18px;
+      width: 14px;
+      height: 14px;
       background: white;
       cursor: pointer;
       border-radius: 50%;
@@ -144,6 +179,61 @@
       background: #ffcc00;
     }
 
+    /* Progress bar */
+    #progressBar {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      cursor: pointer;
+      height: 5px;
+      border-radius: 5px;
+      background: #444;
+      margin: 0 10px;
+      flex-grow: 1;
+      transition: background 0.3s;
+    }
+
+    #progressBar:hover {
+      background: #666;
+    }
+
+    #progressBar::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 14px;
+      height: 14px;
+      background: white;
+      cursor: pointer;
+      border-radius: 50%;
+      border: none;
+      margin-top: -0px;
+      transition: background 0.3s;
+    }
+
+    #progressBar::-webkit-slider-thumb:hover {
+      background: #ffcc00;
+    }
+
+    #progressBar::-moz-range-thumb {
+      width: 14px;
+      height: 14px;
+      background: white;
+      cursor: pointer;
+      border-radius: 50%;
+      border: none;
+      transition: background 0.3s;
+    }
+
+    #progressBar::-moz-range-thumb:hover {
+      background: #ffcc00;
+    }
+
+    /* Fullscreen button on the right */
+    .right-controls {
+      margin-left: 10px;
+    }
+
+    /* Other controls */
     .controls {
       display: flex;
       flex-wrap: wrap;
@@ -181,35 +271,33 @@
       font-size: 24px;
       z-index: 1000;
     }
-    
-    #liveIndicator {
-  color: gray;
-  font-weight: bold;
-  font-size: 14px;
-  background: rgba(255, 255, 255, 0.1);
-  padding: 4px 8px;
-  border-radius: 10px;
-  user-select: none;
-  pointer-events: none;
-} 
-
   </style>
 </head>
 <body oncontextmenu="return false" onkeydown="return disableKeys(event)" ondragstart="return false">
   <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
 
-  <h1>KBS 1 Live Stream</h1>
+  <h1>tvN Live Stream</h1>
 
   <div class="video-wrapper" id="videoWrapper">
     <video id="video" autoplay muted playsinline></video>
     <div id="videoControls">
-      <span id="liveIndicator"> LIVE</span>
-      <button id="playPauseBtn">►</button>
-      <button id="volumeBtn">🔊</button>
-      <input type="range" id="volumeSlider" min="0" max="1" step="0.01" value="1" />
-      <button id="fullscreenBtn">⛶</button>
+      <div class="left-controls">
+        <span id="liveIndicator">LIVE</span>
+        <button id="playPauseBtn">❚❚</button>
+        <div class="volume-container">
+          <button id="volumeBtn">🔇</button>
+          <input type="range" id="volumeSlider" min="0" max="1" step="0.01" value="1" />
+        </div>
+      </div>
+      <input type="range" id="progressBar" min="0" max="100" value="0" step="0.1" />
+      <div class="right-controls">
+        <button id="fullscreenBtn">⛶</button>
+      </div>
     </div>
   </div>
+
+  <div class="controls">
+    <!-- existing controls here -->
 
   <div class="controls">
     <label>
@@ -236,25 +324,25 @@
     const videoControls = document.getElementById('videoControls');
     const volumeBtn = document.getElementById('volumeBtn');
     const volumeSlider = document.getElementById('volumeSlider');
+    const progressBar = document.getElementById('progressBar');
 
     let hls;
     let hideControlsTimeout;
+    let lastVolume = 1;
 
     const sbsStreams = [
-      { label: "SBS Server 1", url: "https://live-edge-th136.myjktv.com/playlist/live.m3u8?sid=Wjv8QpKtgFpxAhHXhtFuN9S1rVVSruXygc0n4IYX&secret=73a8be351b73ea11e974dae64ea10328&time=1747621916" },
-      { label: "SBS Server 2", url: "https://live-edge-th136.myjktv.com/playlist/live.m3u8?sid=aXCkIWNzELGoZwq56i2atSaheOtL8tFhUGXFC3Sh&secret=480c5272321b87b0188250f95f80339b&time=1747622073" },
-      { label: "SBS Server 3", url: "https://world.gscdn.kbs.co.kr/world-02/world-02_sd.m3u8?Expires=1747758466&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly93b3JsZC5nc2Nkbi5rYnMuY28ua3Ivd29ybGQtMDIvd29ybGQtMDJfc2QubTN1OCIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiQVdTOkVwb2NoVGltZSI6MTc0Nzc1ODQ2Nn19fV19&Signature=Qm1nZ1zEgkIOzzHhBF3wrbq6p6OIGdz3vFUlU12OdPPKhcwGIkmKJLJgNjO9yvx5cxiVRiucX8GQZ-uXe-FupE8Buduo86ZD4FwHVGFi63sTeJkknNDq-fnU1QLTXsuEw4gAQRy5dVLREFDX~Wt08llZwnb6g6NHCNOHUJHJJ1HoHPSWe9GNibytUjP3Djfwgn9iib9AJa3ghqw-yFlDUtQFI2TuSI37bV3hfHN2-5yzuxRyCrpa29x3iSv1YjEDlVvl0NSyfsOWiZt6GrnAb-oJXTAmeieSsdtZNAU8~xo1gCzMBW0mN2q-Q0LleY9rU22f6ziKRB8xO0~P3-Ng0w__&Key-Pair-Id=APKAICDSGT3Y7IXGJ3TA" },
-      { label: "SBS Server 4", url: "https://live-edge-th136.myjktv.com/playlist/live.m3u8?sid=zMKDd7uEBCUAGIZSFQtpP9oI4BbTtozGPz7baIqL&secret=32b6100e6a91e0cd521e2f4061adc5ec&time=1747587382" },
-      { label: "SBS Server 5", url: "" }
-      
+      { label: "KBS 1 Server 1", url: "https://live-114.myjktv.com/playlist/live.m3u8?sid=b2HTZ3sdJFsKUSGhsXIvTG8Cm7HQNCXjgyWMSQMc&secret=58b918d6f125e5c3bea32e8b13d785e9&time=1747633930" },
+      { label: "KBS 1 Server 2", url: "https://live-edge-th136.myjktv.com/playlist/live.m3u8?sid=YN9SjTVGpPNyL4xGbTc6sMfxdpdI29tJE7ochKjH&secret=fec84441761ba9835702a9410516a1c0&time=1747634111" },
+      { label: "KBS      WORLD", url: "https://world.gscdn.kbs.co.kr/world-02/world-02_sd.m3u8?Expires=1747758466&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly93b3JsZC5nc2Nkbi5rYnMuY28ua3Ivd29ybGQtMDIvd29ybGQtMDJfc2QubTN1OCIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiQVdTOkVwb2NoVGltZSI6MTc0Nzc1ODQ2Nn19fV19&Signature=Qm1nZ1zEgkIOzzHhBF3wrbq6p6OIGdz3vFUlU12OdPPKhcwGIkmKJLJgNjO9yvx5cxiVRiucX8GQZ-uXe-FupE8Buduo86ZD4FwHVGFi63sTeJkknNDq-fnU1QLTXsuEw4gAQRy5dVLREFDX~Wt08llZwnb6g6NHCNOHUJHJJ1HoHPSWe9GNibytUjP3Djfwgn9iib9AJa3ghqw-yFlDUtQFI2TuSI37bV3hfHN2-5yzuxRyCrpa29x3iSv1YjEDlVvl0NSyfsOWiZt6GrnAb-oJXTAmeieSsdtZNAU8~xo1gCzMBW0mN2q-Q0LleY9rU22f6ziKRB8xO0~P3-Ng0w__&Key-Pair-Id=APKAICDSGT3Y7IXGJ3TA" },
+      { label: "KBS 1 Server 4", url: "https://1tv.gscdn.kbs.co.kr/1tv_3.m3u8?Expires=1747806709&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly8xdHYuZ3NjZG4ua2JzLmNvLmtyLzF0dl8zLm0zdTgiLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkFXUzpFcG9jaFRpbWUiOjE3NDc4MDY3MDl9fX1dfQ__&Signature=L0wPuYTUN~NYVIcdmwe9nuD6K2bFr98aJ8LgsURSQ8aRlrPWJ~6ADOcxXDKOeNdHc69VXwQxustjz0YmuO0Dr7ZwygPs-OLMGYGTCutZsG2DCR2yNYL5FCqAd0jCYxbneyFQwrJxqdBvvposzbLRXMeqyQfVXjBLNwsGcU1WVWUImbc-M9rmWGdYfEjJJEF5r3dtttOnf~9QhLeKTKm8Xl9FP~XldH2rQtmYgPuvyxzGPkDj~W3W9hO65JZiaQ3h~EkEtbYgKsa4GaxJoHMKxop3N5Iagg0P5BexrV9WUoXZbnKqpy5ExEbxW7~AtXXDgEhHyyuc~oishp6tLq~8og__&Key-Pair-Id=APKAICDSGT3Y7IXGJ3TA" },
+      { label: "KBS 1 Server 5", url: "https://cdn.th11.jpnettv.live/playlist/live.m3u8?sid=qm5vRTqoZ1Tmor09NGmEtT0aR4wmLsIAjV1fYxzQ&secret=7ec419641a6e23fb3e093a536513325d&time=1747634210" },
+      { label: "KBS 1 Server 6", url: "https://live-edge-th136.myjktv.com/playlist/live.m3u8?sid=naDhAusoFuzU8SLsTTbpdQwNd6BIYt4LHmbH73qf&secret=58e7a03b671379cb2938a3c141e8805f&time=1747634253" },
+      { label: "KBS 1 Server 7", url: "" }
     ];
 
     function loadStream(index) {
       const stream = sbsStreams[index];
-      if (!stream || !stream.url) {
-        alert("NO SERVER.");
-        return;
-      }
+      if (!stream || !stream.url) return alert("NO SERVER.");
 
       if (hls) {
         hls.destroy();
@@ -274,12 +362,10 @@
 
         hls.on(Hls.Events.MANIFEST_PARSED, () => {
           const levels = hls.levels;
-
           const fixedQualities = [144, 240, 360, 480, 720, 1080];
           fixedQualities.forEach(q => {
             let closestIndex = -1;
             let minDiff = Infinity;
-
             levels.forEach((level, i) => {
               const diff = Math.abs(level.height - q);
               if (diff < minDiff) {
@@ -289,182 +375,140 @@
             });
 
             if (closestIndex !== -1) {
-              const opt = document.createElement('option');
-              opt.value = closestIndex;
-              opt.text = `${q}p`;
-              qualitySelect.appendChild(opt);
+              const option = document.createElement('option');
+              option.value = closestIndex;
+              option.text = q + 'p';
+              qualitySelect.appendChild(option);
             }
           });
-
-          video.play().catch(() => {
-            // Auto-play might be blocked on some browsers, ignore error
-          });
         });
+        
 
-        qualitySelect.onchange = () => {
-          const selected = parseInt(qualitySelect.value);
-          hls.currentLevel = selected;
-        };
-
+        qualitySelect.addEventListener('change', () => {
+          if (!hls) return;
+          const val = parseInt(qualitySelect.value);
+          hls.currentLevel = val;
+        });
       } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
         video.src = stream.url;
-        alert("Native HLS support: Quality selection unavailable.");
-        video.play().catch(() => {});
+        video.addEventListener('loadedmetadata', () => {
+          // no adaptive quality control in native HLS
+        });
+      }
+
+      video.play();
+    }
+
+    function populateServers() {
+      serverSelect.innerHTML = '';
+      sbsStreams.forEach((stream, idx) => {
+        const option = document.createElement('option');
+        option.value = idx;
+        option.text = stream.label;
+        serverSelect.appendChild(option);
+      });
+      serverSelect.selectedIndex = 0;
+    }
+
+    function toggleTheme() {
+      if (document.body.classList.contains('light')) {
+        document.body.classList.remove('light');
+        themeBtn.textContent = '🌙';
       } else {
-        alert("HLS not supported on this browser.");
+        document.body.classList.add('light');
+        themeBtn.textContent = '🌞';
       }
     }
 
-    // Play/pause toggle
-    playPauseBtn.addEventListener('click', () => {
+    function togglePlayPause() {
       if (video.paused) {
         video.play();
-        playPauseBtn.textContent = '►';
+        playPauseBtn.textContent = '❚❚';
       } else {
         video.pause();
-        playPauseBtn.textContent = '❚❚';
-      }
-    });
-
-    video.addEventListener('❚❚', () => {
-      playPauseBtn.textContent = '►';
-    });
-    video.addEventListener('►', () => {
-      playPauseBtn.textContent = '❚❚';
-    });
-
-    // Fullscreen toggle
-    fullscreenBtn.addEventListener('click', async () => {
-      if (!document.fullscreenElement) {
-        try {
-          await videoWrapper.requestFullscreen();
-
-          if (screen.orientation && screen.orientation.lock) {
-            await screen.orientation.lock('landscape').catch(() => {});
-          }
-
-          startHideControlsTimer();
-        } catch (err) {
-          console.error('Fullscreen or orientation lock failed:', err);
-        }
-      } else {
-        if (screen.orientation && screen.orientation.unlock) {
-          screen.orientation.unlock();
-        }
-        await document.exitFullscreen();
-        showControls();
-        clearTimeout(hideControlsTimeout);
-      }
-    });
-
-    // Volume button toggle mute/unmute
-    volumeBtn.addEventListener('click', () => {
-      video.muted = !video.muted;
-      if (video.muted) {
-        volumeSlider.value = 0;
-      } else {
-        volumeSlider.value = video.volume;
-      }
-      updateVolumeIcon();
-    });
-
-    // Volume slider control
-    volumeSlider.addEventListener('input', () => {
-      const val = parseFloat(volumeSlider.value);
-      video.volume = val;
-      video.muted = val === 0;
-      updateVolumeIcon();
-    });
-
-    // Sync slider and icon on volume change
-    video.addEventListener('volumechange', () => {
-      if (!video.muted) {
-        volumeSlider.value = video.volume;
-      } else {
-        volumeSlider.value = 1;
-      }
-      updateVolumeIcon();
-    });
-
-    // Update volume icon
-    function updateVolumeIcon() {
-      if (video.muted || video.volume === 0) {
-        volumeBtn.textContent = '🔈'; // muted
-      } else if (video.volume < 0.5) {
-        volumeBtn.textContent = '🔉'; // low volume
-      } else {
-        volumeBtn.textContent = '🔊'; // high volume
+        playPauseBtn.textContent = '▶';
       }
     }
 
-    updateVolumeIcon(); // Initialize icon on load
+    function toggleMute() {
+      if (video.muted || video.volume === 0) {
+        video.muted = false;
+        video.volume = lastVolume;
+        volumeSlider.value = lastVolume;
+        volumeBtn.textContent = '🔊';
+      } else {
+        video.muted = true;
+        volumeBtn.textContent = '🔇';
+      }
+    }
 
-    // Auto-hide controls after 2s of inactivity
-    function startHideControlsTimer() {
-      clearTimeout(hideControlsTimeout);
-      hideControlsTimeout = setTimeout(() => {
-        videoControls.classList.add('hidden');
-      }, 2000);
+    function updateProgress() {
+      const percent = (video.currentTime / video.duration) * 100;
+      progressBar.value = percent || 0;
+    }
+
+    function seek(e) {
+      const seekTime = (progressBar.value / 100) * video.duration;
+      video.currentTime = seekTime;
+    }
+
+    function changeVolume() {
+      video.volume = volumeSlider.value;
+      lastVolume = video.volume;
+      video.muted = video.volume === 0;
+      volumeBtn.textContent = video.muted ? '🔇' : '🔊';
+    }
+
+    function toggleFullscreen() {
+      if (!document.fullscreenElement) {
+        if (videoWrapper.requestFullscreen) {
+          videoWrapper.requestFullscreen();
+        } else if (videoWrapper.mozRequestFullScreen) { /* Firefox */
+          videoWrapper.mozRequestFullScreen();
+        } else if (videoWrapper.webkitRequestFullscreen) { /* Chrome, Safari & Opera */
+          videoWrapper.webkitRequestFullscreen();
+        } else if (videoWrapper.msRequestFullscreen) { /* IE/Edge */
+          videoWrapper.msRequestFullscreen();
+        }
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        }
+      }
     }
 
     function showControls() {
       videoControls.classList.remove('hidden');
+      if (hideControlsTimeout) clearTimeout(hideControlsTimeout);
+      hideControlsTimeout = setTimeout(() => {
+        if (!video.paused) videoControls.classList.add('hidden');
+      }, 2500);
     }
 
-    videoWrapper.addEventListener('mousemove', () => {
-      showControls();
-      startHideControlsTimer();
-    });
-
-    videoWrapper.addEventListener('touchstart', () => {
-      showControls();
-      startHideControlsTimer();
-    });
-
-    document.addEventListener('fullscreenchange', () => {
-      showControls();
-      clearTimeout(hideControlsTimeout);
-      startHideControlsTimer();
-    });
-
-    // Theme toggle logic
-    function toggleTheme() {
-      const isLight = document.body.classList.toggle('light');
-      localStorage.setItem('theme', isLight ? 'light' : 'dark');
-      updateThemeIcon();
+    function disableKeys(e) {
+      const forbiddenKeys = ['F12', 'ContextMenu'];
+      if (forbiddenKeys.includes(e.key)) return false;
     }
 
-    function updateThemeIcon() {
-      const isLight = document.body.classList.contains('light');
-      themeBtn.textContent = isLight ? '☀️' : '🌙';
-}
+    // Event listeners
+    playPauseBtn.addEventListener('click', togglePlayPause);
+    video.addEventListener('click', togglePlayPause);
+    volumeBtn.addEventListener('click', toggleMute);
+    volumeSlider.addEventListener('input', changeVolume);
+    progressBar.addEventListener('input', seek);
+    fullscreenBtn.addEventListener('click', toggleFullscreen);
+    videoWrapper.addEventListener('mousemove', showControls);
+    videoWrapper.addEventListener('mouseleave', () => videoControls.classList.add('hidden'));
+    video.addEventListener('timeupdate', updateProgress);
+    serverSelect.addEventListener('change', () => loadStream(serverSelect.value));
 
-function loadTheme() {
-  const savedTheme = localStorage.getItem('theme');
-  if (savedTheme === 'light') {
-    document.body.classList.add('light');
-  }
-  updateThemeIcon();
-}
+    // Init
+    populateServers();
+    loadStream(0);
+    showControls();
 
-function disableKeys(e) {
-  return ['F12', 'I', 'J', 'U', 'S', 'C'].includes(e.key.toUpperCase()) && (e.ctrlKey || e.metaKey) ? false : true;
-}
-
-loadTheme();
-
-// Load servers on start
-sbsStreams.forEach((s, i) => {
-  const opt = document.createElement('option');
-  opt.value = i;
-  opt.text = s.label;
-  serverSelect.appendChild(opt);
-});
-
-serverSelect.onchange = () => loadStream(serverSelect.value);
-serverSelect.value = 0;
-loadStream(0); // Load default stream
-
-</script>
-</body> 
+    // Disable right click globally
+    document.addEventListener('contextmenu', e => e.preventDefault());
+  </script>
+</body>
 </html>
